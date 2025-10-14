@@ -176,7 +176,7 @@ BEGIN
       RAISE EXCEPTION 'Payment cancellation failed: % (SQLSTATE: %)', SQLERRM, SQLSTATE;
   END;
 END;
-$function$
+$function$;
 
 
 -- Function: fn_issue_enrollment
@@ -262,7 +262,7 @@ BEGIN
   RETURN NEXT;
   RETURN;
 END;
-$function$
+$function$;
 
 
 -- Function: get_fee_payment_summary
@@ -321,7 +321,7 @@ BEGIN
     'summary_date', CURRENT_TIMESTAMP
   ));
 END;
-$function$
+$function$;
 
 
 -- Function: gin_extract_query_trgm
@@ -557,7 +557,7 @@ BEGIN
     
     RETURN NEW;
 END;
-$function$
+$function$;
 
 
 -- Function: process_fee_payment
@@ -884,7 +884,7 @@ BEGIN
       RAISE EXCEPTION 'Payment processing failed: % (SQLSTATE: %)', SQLERRM, SQLSTATE;
   END;
 END;
-$function$
+$function$;
 
 
 -- Function: rpc_students_grid_live
@@ -988,7 +988,7 @@ AS $function$
     CASE WHEN p_sort = 'current_due' AND p_order = 'desc' THEN COALESCE(fy.current_due, 0) END DESC,
     j.full_name ASC, j.enrollment_id ASC
   LIMIT p_limit OFFSET p_offset;
-$function$
+$function$;
 
 
 -- Function: set_limit
@@ -1468,7 +1468,7 @@ BEGIN
     RAISE EXCEPTION 'Payment update failed: % (SQLSTATE: %)', SQLERRM, SQLSTATE;
   END; -- transactional block
 END;
-$function$
+$function$;
 
 
 -- Function: update_student_fee_overrides_updated_by
@@ -1487,7 +1487,7 @@ BEGIN
   END IF;
   RETURN NEW;
 END;
-$function$
+$function$;
 
 
 -- Function: user_has_permission
@@ -1503,7 +1503,7 @@ AS $function$
       -- Simple check: allow if user is authenticated
       RETURN p_user_id IS NOT NULL;
     END;
-    $function$
+    $function$;
 
 
 -- Function: word_similarity

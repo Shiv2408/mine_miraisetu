@@ -45,7 +45,7 @@ DROP TABLE IF EXISTS public.system_config CASCADE;
 
 -- Create tables (in dependency order)
 -- Table: system_config
-CREATE TABLE public.system_config (,
+CREATE TABLE public.system_config (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     key text NOT NULL,
     value jsonb,
@@ -56,7 +56,7 @@ CREATE TABLE public.system_config (,
 );
 
 -- Table: students
-CREATE TABLE public.students (,
+CREATE TABLE public.students (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     legacy_student_id integer,
     full_name text NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE public.students (,
 );
 
 -- Table: colleges
-CREATE TABLE public.colleges (,
+CREATE TABLE public.colleges (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     legacy_id integer,
     code text,
@@ -91,7 +91,7 @@ CREATE TABLE public.colleges (,
 );
 
 -- Table: agents
-CREATE TABLE public.agents (,
+CREATE TABLE public.agents (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     legacy_id integer,
     name text NOT NULL,
@@ -110,7 +110,7 @@ CREATE TABLE public.agents (,
 );
 
 -- Table: fee_components
-CREATE TABLE public.fee_components (,
+CREATE TABLE public.fee_components (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     code text NOT NULL,
     label text NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE public.fee_components (,
 );
 
 -- Table: academic_sessions
-CREATE TABLE public.academic_sessions (,
+CREATE TABLE public.academic_sessions (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     legacy_id integer NOT NULL,
     title text NOT NULL,
@@ -139,7 +139,7 @@ CREATE TABLE public.academic_sessions (,
 );
 
 -- Table: audit_logs
-CREATE TABLE public.audit_logs (,
+CREATE TABLE public.audit_logs (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     table_name text NOT NULL,
     operation text NOT NULL,
@@ -152,7 +152,7 @@ CREATE TABLE public.audit_logs (,
 );
 
 -- Table: roles
-CREATE TABLE public.roles (,
+CREATE TABLE public.roles (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     name text NOT NULL,
     display_name text NOT NULL,
@@ -172,7 +172,7 @@ CREATE TABLE public.roles (,
 );
 
 -- Table: report_templates
-CREATE TABLE public.report_templates (,
+CREATE TABLE public.report_templates (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     name text NOT NULL,
     description text,
@@ -190,7 +190,7 @@ CREATE TABLE public.report_templates (,
 );
 
 -- Table: permissions
-CREATE TABLE public.permissions (,
+CREATE TABLE public.permissions (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     name text NOT NULL,
     display_name text NOT NULL,
@@ -210,7 +210,7 @@ CREATE TABLE public.permissions (,
 );
 
 -- Table: fee_receipts
-CREATE TABLE public.fee_receipts (,
+CREATE TABLE public.fee_receipts (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     receipt_number text NOT NULL,
     receipt_date date NOT NULL,
@@ -259,7 +259,7 @@ CREATE TABLE public.fee_receipts (,
 );
 
 -- Table: users
-CREATE TABLE public.users (,
+CREATE TABLE public.users (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     email text NOT NULL,
     phone text,
@@ -289,7 +289,7 @@ CREATE TABLE public.users (,
 );
 
 -- Table: student_addresses
-CREATE TABLE public.student_addresses (,
+CREATE TABLE public.student_addresses (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     student_id uuid NOT NULL,
     addr_type text NOT NULL,
@@ -304,7 +304,7 @@ CREATE TABLE public.student_addresses (,
 );
 
 -- Table: student_contacts
-CREATE TABLE public.student_contacts (,
+CREATE TABLE public.student_contacts (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     student_id uuid NOT NULL,
     contact_type text NOT NULL,
@@ -319,7 +319,7 @@ CREATE TABLE public.student_contacts (,
 );
 
 -- Table: student_identity_documents
-CREATE TABLE public.student_identity_documents (,
+CREATE TABLE public.student_identity_documents (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     student_id uuid NOT NULL,
     doc_type text NOT NULL,
@@ -332,7 +332,7 @@ CREATE TABLE public.student_identity_documents (,
 );
 
 -- Table: student_internal_refs
-CREATE TABLE public.student_internal_refs (,
+CREATE TABLE public.student_internal_refs (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     student_id uuid NOT NULL,
     ref_group text NOT NULL,
@@ -345,7 +345,7 @@ CREATE TABLE public.student_internal_refs (,
 );
 
 -- Table: student_notes
-CREATE TABLE public.student_notes (,
+CREATE TABLE public.student_notes (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     student_id uuid NOT NULL,
     note text NOT NULL,
@@ -355,7 +355,7 @@ CREATE TABLE public.student_notes (,
 );
 
 -- Table: student_prior_education
-CREATE TABLE public.student_prior_education (,
+CREATE TABLE public.student_prior_education (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     student_id uuid NOT NULL,
     level text,
@@ -369,7 +369,7 @@ CREATE TABLE public.student_prior_education (,
 );
 
 -- Table: student_profiles
-CREATE TABLE public.student_profiles (,
+CREATE TABLE public.student_profiles (
     student_id uuid NOT NULL,
     mother_name text,
     father_name text,
@@ -384,7 +384,7 @@ CREATE TABLE public.student_profiles (,
 );
 
 -- Table: courses
-CREATE TABLE public.courses (,
+CREATE TABLE public.courses (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     course_identity integer NOT NULL,
     college_id uuid NOT NULL,
@@ -399,7 +399,7 @@ CREATE TABLE public.courses (,
 );
 
 -- Table: agent_contacts
-CREATE TABLE public.agent_contacts (,
+CREATE TABLE public.agent_contacts (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     agent_id uuid NOT NULL,
     contact_type text NOT NULL,
@@ -414,7 +414,7 @@ CREATE TABLE public.agent_contacts (,
 );
 
 -- Table: agent_notes
-CREATE TABLE public.agent_notes (,
+CREATE TABLE public.agent_notes (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     agent_id uuid NOT NULL,
     remarks text NOT NULL,
@@ -428,7 +428,7 @@ CREATE TABLE public.agent_notes (,
 );
 
 -- Table: agent_tags
-CREATE TABLE public.agent_tags (,
+CREATE TABLE public.agent_tags (
     agent_id uuid NOT NULL,
     tag text NOT NULL,
     created_at timestamp with time zone NOT NULL DEFAULT now(),
@@ -436,7 +436,7 @@ CREATE TABLE public.agent_tags (,
 );
 
 -- Table: fee_ledger_events
-CREATE TABLE public.fee_ledger_events (,
+CREATE TABLE public.fee_ledger_events (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     event_type public.fee_ledger_event_type NOT NULL,
     event_date timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -464,7 +464,7 @@ CREATE TABLE public.fee_ledger_events (,
 );
 
 -- Table: fee_receipt_balance_records
-CREATE TABLE public.fee_receipt_balance_records (,
+CREATE TABLE public.fee_receipt_balance_records (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     receipt_id uuid NOT NULL,
     fee_component_id uuid NOT NULL,
@@ -489,7 +489,7 @@ CREATE TABLE public.fee_receipt_balance_records (,
 );
 
 -- Table: external_user_profiles
-CREATE TABLE public.external_user_profiles (,
+CREATE TABLE public.external_user_profiles (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     user_id uuid NOT NULL,
     external_system text NOT NULL,
@@ -523,7 +523,7 @@ CREATE TABLE public.external_user_profiles (,
 );
 
 -- Table: role_permissions
-CREATE TABLE public.role_permissions (,
+CREATE TABLE public.role_permissions (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     role_id uuid NOT NULL,
     permission_id uuid NOT NULL,
@@ -535,7 +535,7 @@ CREATE TABLE public.role_permissions (,
 );
 
 -- Table: staff_profiles
-CREATE TABLE public.staff_profiles (,
+CREATE TABLE public.staff_profiles (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     user_id uuid NOT NULL,
     employee_id text,
@@ -582,7 +582,7 @@ CREATE TABLE public.staff_profiles (,
 );
 
 -- Table: student_user_profiles
-CREATE TABLE public.student_user_profiles (,
+CREATE TABLE public.student_user_profiles (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     user_id uuid NOT NULL,
     student_id uuid NOT NULL,
@@ -608,7 +608,7 @@ CREATE TABLE public.student_user_profiles (,
 );
 
 -- Table: user_invitations
-CREATE TABLE public.user_invitations (,
+CREATE TABLE public.user_invitations (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     email text NOT NULL,
     invitation_token uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -625,7 +625,7 @@ CREATE TABLE public.user_invitations (,
 );
 
 -- Table: user_roles
-CREATE TABLE public.user_roles (,
+CREATE TABLE public.user_roles (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     user_id uuid NOT NULL,
     role_id uuid NOT NULL,
@@ -640,7 +640,7 @@ CREATE TABLE public.user_roles (,
 );
 
 -- Table: fee_plans
-CREATE TABLE public.fee_plans (,
+CREATE TABLE public.fee_plans (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     legacy_id integer,
     course_id uuid NOT NULL,
@@ -660,7 +660,7 @@ CREATE TABLE public.fee_plans (,
 );
 
 -- Table: fee_receipt_allocations
-CREATE TABLE public.fee_receipt_allocations (,
+CREATE TABLE public.fee_receipt_allocations (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     receipt_id uuid NOT NULL,
     ledger_event_id uuid NOT NULL,
@@ -680,7 +680,7 @@ CREATE TABLE public.fee_receipt_allocations (,
 );
 
 -- Table: fee_plan_items
-CREATE TABLE public.fee_plan_items (,
+CREATE TABLE public.fee_plan_items (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     fee_plan_id uuid NOT NULL,
     year_number smallint,
@@ -697,7 +697,7 @@ CREATE TABLE public.fee_plan_items (,
 );
 
 -- Table: student_enrollments
-CREATE TABLE public.student_enrollments (,
+CREATE TABLE public.student_enrollments (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     student_id uuid NOT NULL,
     course_id uuid,
@@ -720,7 +720,7 @@ CREATE TABLE public.student_enrollments (,
 );
 
 -- Table: fee_adjustments
-CREATE TABLE public.fee_adjustments (,
+CREATE TABLE public.fee_adjustments (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     enrollment_id uuid NOT NULL,
     academic_year text NOT NULL,
@@ -751,7 +751,7 @@ CREATE TABLE public.fee_adjustments (,
 );
 
 -- Table: fee_current_balances
-CREATE TABLE public.fee_current_balances (,
+CREATE TABLE public.fee_current_balances (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     enrollment_id uuid NOT NULL,
     academic_year text,
@@ -782,7 +782,7 @@ CREATE TABLE public.fee_current_balances (,
 );
 
 -- Table: student_fee_overrides
-CREATE TABLE public.student_fee_overrides (,
+CREATE TABLE public.student_fee_overrides (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     enrollment_id uuid NOT NULL,
     fee_plan_item_id uuid,
@@ -800,7 +800,7 @@ CREATE TABLE public.student_fee_overrides (,
 );
 
 -- Table: student_progressions
-CREATE TABLE public.student_progressions (,
+CREATE TABLE public.student_progressions (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     enrollment_id uuid NOT NULL,
     from_year smallint,
@@ -1114,7 +1114,7 @@ CREATE UNIQUE INDEX system_config_key_key ON public.system_config (key);
 -- Indexes for students
 CREATE UNIQUE INDEX students_legacy_student_id_key ON public.students (legacy_student_id);
 CREATE UNIQUE INDEX idx_students_legacy ON public.students (legacy_student_id);
-CREATE INDEX ix_students_full_name_trgm ON public.students (full_name gin_trgm_ops);
+-- CREATE INDEX ix_students_full_name_trgm ON public.students (full_name gin_trgm_ops);
 
 -- Indexes for colleges
 CREATE UNIQUE INDEX colleges_legacy_id_key ON public.colleges (legacy_id);
@@ -1271,7 +1271,7 @@ CREATE INDEX idx_student_enrollments_agent ON public.student_enrollments (agent_
 CREATE INDEX ix_student_enrollments_session ON public.student_enrollments (session_id);
 CREATE INDEX ix_student_enrollments_course ON public.student_enrollments (course_id);
 CREATE INDEX ix_student_enrollments_code ON public.student_enrollments (enrollment_code);
-CREATE INDEX ix_student_enrollments_code_trgm ON public.student_enrollments (enrollment_code gin_trgm_ops);
+-- CREATE INDEX ix_student_enrollments_code_trgm ON public.student_enrollments (enrollment_code gin_trgm_ops);
 CREATE INDEX ix_student_enrollments_course_session ON public.student_enrollments (course_id, session_id);
 
 -- Indexes for fee_adjustments

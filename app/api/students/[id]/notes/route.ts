@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { studentService } from "@/lib/services/student.service";
+import { createClient } from "@/lib/supabase/server";
 
 export async function GET(
   request: NextRequest,
@@ -31,24 +32,33 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = await params;
-    const studentId = id;
-    const { note, created_by } = await request.json();
+    // 1. Create a server-side Supabase client
+    const supabase = createClient();
+
+    // 2. Securely get the user session from the cookies
+    const { data: { user } } = await (await supabase).auth.getUser();
+
+    // 3. Check if the user is authenticated
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const currentUserId = user.id; // <-- This is the secure user UUID
+
+    const { id: studentId } = params;
+    const { note } = await request.json();
 
     if (!note?.trim()) {
-      return NextResponse.json(
-        { error: "Note content is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Note content is required" }, { status: 400 });
     }
 
+    // 4. Use the secure user ID to add the note
     const newNote = await studentService.addStudentNote(
       studentId,
       note.trim(),
-      created_by
+      currentUserId
     );
 
     return NextResponse.json(newNote, { status: 201 });

@@ -291,7 +291,7 @@ function RowPrintMenu({
   const loadColleges = useAcademicStore((s) => s.loadColleges);
   React.useEffect(() => {
     if (!colleges || colleges.length === 0) {
-      loadColleges().catch(() => {});
+      loadColleges().catch(() => { });
     }
   }, [colleges, loadColleges]);
 
@@ -585,15 +585,13 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
     }
   };
 
-  // Handle adding a new note
   const handleAddNote = async (noteText: string) => {
     try {
       const response = await fetch(`/api/students/${studentId}/notes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          note: noteText,
-          created_by: "Current User",
+          note: noteText, // <-- Only send the note
         }),
       });
       if (!response.ok) throw new Error("Failed to add note");
@@ -1080,8 +1078,8 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
                       <p className="font-mono text-sm">
                         {overview?.current_enrollment?.enrollment_date
                           ? formatDate(
-                              overview.current_enrollment.enrollment_date
-                            )
+                            overview.current_enrollment.enrollment_date
+                          )
                           : "-"}
                       </p>
                     </div>
@@ -1092,8 +1090,8 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
                         value={
                           overview?.current_enrollment?.joining_date
                             ? formatDate(
-                                overview.current_enrollment.joining_date
-                              )
+                              overview.current_enrollment.joining_date
+                            )
                             : ""
                         }
                         onSave={(value) =>
@@ -1291,11 +1289,10 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
                         <Card>
                           <CardContent className="p-4 text-center">
                             <div
-                              className={`text-2xl font-bold ${
-                                totalOutstanding > 0
+                              className={`text-2xl font-bold ${totalOutstanding > 0
                                   ? "text-red-600"
                                   : "text-green-600"
-                              }`}
+                                }`}
                             >
                               ₹{totalOutstanding.toLocaleString()}
                             </div>
@@ -1375,7 +1372,7 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
                             // For lateral entry students, Year 1 TUITION/ADMISSION fees are waived, not discounted
                             const isLateralEntryYear1Waiver =
                               overview?.current_enrollment?.entry_type ===
-                                "lateral" &&
+                              "lateral" &&
                               detail.year_number === 1 &&
                               (detail.component_code === "TUITION" ||
                                 detail.component_code === "ADMISSION");
@@ -1535,15 +1532,14 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
                               </td>
                               <td className="border border-gray-200 px-4 py-3 text-right text-sm font-mono">
                                 <span
-                                  className={`font-bold ${
-                                    fees.fee_details.reduce(
-                                      (sum, d) =>
-                                        sum + (d.outstanding_amount || 0),
-                                      0
-                                    ) > 0
+                                  className={`font-bold ${fees.fee_details.reduce(
+                                    (sum, d) =>
+                                      sum + (d.outstanding_amount || 0),
+                                    0
+                                  ) > 0
                                       ? "text-red-600"
                                       : "text-green-600"
-                                  }`}
+                                    }`}
                                 >
                                   ₹
                                   {fees.fee_details
@@ -1682,111 +1678,111 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
                         };
                         const rows: ReceiptRow[] =
                           fees.detailed_receipts &&
-                          fees.detailed_receipts.length
+                            fees.detailed_receipts.length
                             ? fees.detailed_receipts.map((r) => {
-                                const balanceFromRecords = (
+                              const balanceFromRecords = (
+                                r as {
+                                  all_component_balances?: Array<{
+                                    component_balance?: number;
+                                  }>;
+                                }
+                              ).all_component_balances?.reduce(
+                                (sum, b) => sum + (b.component_balance || 0),
+                                0
+                              );
+                              const balance =
+                                (typeof balanceFromRecords === "number"
+                                  ? balanceFromRecords
+                                  : undefined) ??
+                                (r as { balance_amount?: number })
+                                  .balance_amount ??
+                                0;
+                              // Prepare arrays for detailed rendering
+                              const componentsArr =
+                                (
                                   r as {
-                                    all_component_balances?: Array<{
-                                      component_balance?: number;
+                                    components?: Array<{
+                                      component_name?: string;
+                                      allocated_amount?: number;
+                                      component_code?: string;
                                     }>;
                                   }
-                                ).all_component_balances?.reduce(
-                                  (sum, b) => sum + (b.component_balance || 0),
-                                  0
-                                );
-                                const balance =
-                                  (typeof balanceFromRecords === "number"
-                                    ? balanceFromRecords
-                                    : undefined) ??
-                                  (r as { balance_amount?: number })
-                                    .balance_amount ??
-                                  0;
-                                // Prepare arrays for detailed rendering
-                                const componentsArr =
-                                  (
-                                    r as {
-                                      components?: Array<{
-                                        component_name?: string;
-                                        allocated_amount?: number;
-                                        component_code?: string;
-                                      }>;
-                                    }
-                                  ).components || [];
-                                const balancesArr =
-                                  (
-                                    r as {
-                                      all_component_balances?: Array<{
-                                        component_name?: string;
-                                        component_balance?: number;
-                                        component_code?: string;
-                                      }>;
-                                    }
-                                  ).all_component_balances || [];
-                                const mergedDetails: FeeDetailRow[] = (() => {
-                                  const map = new Map<string, FeeDetailRow>();
-                                  componentsArr.forEach((c) => {
-                                    const key =
-                                      c.component_code ||
-                                      c.component_name ||
-                                      "UNKNOWN";
-                                    const existing = map.get(key) || {
-                                      code: c.component_code,
-                                      name: c.component_name,
-                                      paid: 0,
-                                      balance: 0,
-                                    };
-                                    existing.paid += c.allocated_amount || 0;
-                                    map.set(key, existing);
-                                  });
-                                  balancesArr.forEach((b) => {
-                                    const key =
-                                      b.component_code ||
-                                      b.component_name ||
-                                      "UNKNOWN";
-                                    const existing = map.get(key) || {
-                                      code: b.component_code,
-                                      name: b.component_name,
-                                      paid: 0,
-                                      balance: 0,
-                                    };
-                                    existing.balance +=
-                                      b.component_balance || 0;
-                                    map.set(key, existing);
-                                  });
-                                  return Array.from(map.values());
-                                })();
-                                return {
-                                  id: r.id,
-                                  receipt_number: r.receipt_number,
-                                  receipt_date: r.receipt_date,
-                                  academic_year: r.academic_year,
-                                  payment_method: r.payment_method,
-                                  status: r.status,
-                                  paid_amount: r.paid_amount || 0,
-                                  balance_total: balance,
-                                  components_arr: componentsArr,
-                                  balances_arr: balancesArr,
-                                  details: mergedDetails,
-                                  remarks:
-                                    (r as { remarks?: string }).remarks || "",
-                                  payment_reference: r.payment_reference ?? "",
-                                };
-                              })
+                                ).components || [];
+                              const balancesArr =
+                                (
+                                  r as {
+                                    all_component_balances?: Array<{
+                                      component_name?: string;
+                                      component_balance?: number;
+                                      component_code?: string;
+                                    }>;
+                                  }
+                                ).all_component_balances || [];
+                              const mergedDetails: FeeDetailRow[] = (() => {
+                                const map = new Map<string, FeeDetailRow>();
+                                componentsArr.forEach((c) => {
+                                  const key =
+                                    c.component_code ||
+                                    c.component_name ||
+                                    "UNKNOWN";
+                                  const existing = map.get(key) || {
+                                    code: c.component_code,
+                                    name: c.component_name,
+                                    paid: 0,
+                                    balance: 0,
+                                  };
+                                  existing.paid += c.allocated_amount || 0;
+                                  map.set(key, existing);
+                                });
+                                balancesArr.forEach((b) => {
+                                  const key =
+                                    b.component_code ||
+                                    b.component_name ||
+                                    "UNKNOWN";
+                                  const existing = map.get(key) || {
+                                    code: b.component_code,
+                                    name: b.component_name,
+                                    paid: 0,
+                                    balance: 0,
+                                  };
+                                  existing.balance +=
+                                    b.component_balance || 0;
+                                  map.set(key, existing);
+                                });
+                                return Array.from(map.values());
+                              })();
+                              return {
+                                id: r.id,
+                                receipt_number: r.receipt_number,
+                                receipt_date: r.receipt_date,
+                                academic_year: r.academic_year,
+                                payment_method: r.payment_method,
+                                status: r.status,
+                                paid_amount: r.paid_amount || 0,
+                                balance_total: balance,
+                                components_arr: componentsArr,
+                                balances_arr: balancesArr,
+                                details: mergedDetails,
+                                remarks:
+                                  (r as { remarks?: string }).remarks || "",
+                                payment_reference: r.payment_reference ?? "",
+                              };
+                            })
                             : (fees.recent_payments || []).map((p) => ({
-                                id: p.id,
-                                receipt_number: p.receipt_number,
-                                receipt_date: p.receipt_date,
-                                academic_year: "-",
-                                payment_method: p.payment_method,
-                                status: p.status,
-                                paid_amount: p.amount,
-                                balance_total: null,
-                                components_arr: [],
-                                balances_arr: [],
-                                details: [],
-                                remarks: "",
-                                payment_reference: "",
-                              }));
+                              id: p.id,
+                              receipt_number: p.receipt_number,
+                              receipt_date: p.receipt_date,
+                              academic_year: "-",
+                              payment_method: p.payment_method,
+                              status: p.status,
+                              paid_amount: p.amount,
+                              balance_total: null,
+                              components_arr: [],
+                              balances_arr: [],
+                              details: [],
+                              remarks: "",
+                              payment_reference: "",
+                            }));
 
                         if (!rows || rows.length === 0) {
                           return (
@@ -1890,9 +1886,9 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
                                                             );
                                                           const isAdmission =
                                                             low ===
-                                                              "admission fee" ||
+                                                            "admission fee" ||
                                                             low ===
-                                                              "admission" ||
+                                                            "admission" ||
                                                             low.includes(
                                                               "admission"
                                                             );
@@ -2416,27 +2412,27 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
         student={
           overview?.student && overview?.current_enrollment
             ? {
-                student_id: overview.student.id,
-                enrollment_id: "", // Not available in this context but required by type
-                full_name: overview.student.full_name,
-                enrollment_code: overview.student.enrollment_code,
-                current_year: overview.current_enrollment.current_year,
-                course_name: overview.current_enrollment.course_name,
-                session_title: overview.current_enrollment.session_title,
-                college_name: overview.current_enrollment.college_name,
-                father_name: overview.profile?.father_name || null,
-                mother_name: overview.profile?.mother_name || null,
-                session_id: null,
-                course_id: null,
-                course_duration: overview.current_enrollment.course_duration,
-                college_id: null,
-                college_code: overview.current_enrollment.college_code,
-                previous_balance: null,
-                current_due: null,
-                total_outstanding: null,
-                last_payment_date: null,
-                last_payment_amount: null,
-              }
+              student_id: overview.student.id,
+              enrollment_id: "", // Not available in this context but required by type
+              full_name: overview.student.full_name,
+              enrollment_code: overview.student.enrollment_code,
+              current_year: overview.current_enrollment.current_year,
+              course_name: overview.current_enrollment.course_name,
+              session_title: overview.current_enrollment.session_title,
+              college_name: overview.current_enrollment.college_name,
+              father_name: overview.profile?.father_name || null,
+              mother_name: overview.profile?.mother_name || null,
+              session_id: null,
+              course_id: null,
+              course_duration: overview.current_enrollment.course_duration,
+              college_id: null,
+              college_code: overview.current_enrollment.college_code,
+              previous_balance: null,
+              current_due: null,
+              total_outstanding: null,
+              last_payment_date: null,
+              last_payment_amount: null,
+            }
             : null
         }
         editReceiptData={editReceiptData}
